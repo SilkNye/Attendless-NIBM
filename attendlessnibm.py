@@ -39,16 +39,6 @@ if 'modules' not in st.session_state:
 if 'file_processed' not in st.session_state:
     st.session_state.file_processed = False
 
-def save_module_mappings(mappings):
-    """Save module mappings to JSON file and session state"""
-    try:
-        with open('module_mappings.json', 'w') as f:
-            json.dump(mappings, f, indent=2)
-        # Also update session state
-        st.session_state.mappings = mappings
-    except Exception as e:
-        st.error(f"Error saving mappings: {e}")
-
 def is_exam_session(text):
     """Check if session is exam-related (these don't count for attendance)"""
     if pd.isna(text):
@@ -375,7 +365,7 @@ def main():
                 st.write("---")
         
         if unmapped_sessions:
-            st.warning(f"⚠️ Found {len(unmapped_sessions)} unmapped sessions. Please map them below:")
+            st.warning(f"⚠️ Found {len(unmapped_sessions)} unmapped sessions. Let @silknye know:")
             
             # Create mapping interface
             st.subheader("🗂️ Session Mapping")
@@ -390,21 +380,6 @@ def main():
                     st.dataframe(mapping_df)
             
             # Map unmapped sessions
-            for session, normalized in unmapped_sessions:
-                col1, col2 = st.columns([3, 1])
-                with col1:
-                    st.text(f"📝 Session: {session}")
-                with col2:
-                    module_code = st.text_input(
-                        f"Module Code",
-                        key=f"mapping_{normalized}",
-                        placeholder="e.g., DLO, ECS, DSA"
-                    )
-                    if module_code:
-                        mappings[normalized] = module_code.upper()
-                        save_module_mappings(mappings)
-                        st.success(f"✅ Mapped to {module_code.upper()}")
-                        st.rerun()  # Use st.rerun() instead of st.experimental_rerun()
         
         # Build module list
         st.session_state.modules = build_module_list(st.session_state.df, mappings)
