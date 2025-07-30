@@ -281,6 +281,25 @@ def download_from_sharepoint():
     except Exception as e:
         st.error(f"Error downloading file: {e}")
         return None
+    
+def download_from_sharepoint2():
+    """Download Excel from SharePoint public link"""
+    shared_link = "https://nibm-my.sharepoint.com/:x:/g/personal/amilau_nibm_lk/EdzoomT5ACJCjUpohkuSd78B6FMiyqSt2LeF4a3nZuXFkw?e=phnvms"
+    
+    try:
+        # Extract file id token from URL
+        file_id = urlparse(shared_link).path.split('/')[-1]
+        direct_download_url = f"https://nibm-my.sharepoint.com/personal/chandula_nibm_lk/_layouts/15/download.aspx?share={file_id}"
+        
+        response = requests.get(direct_download_url, stream=True)
+        if response.status_code == 200:
+            return BytesIO(response.content)
+        else:
+            st.error(f"Failed to download file (HTTP {response.status_code})")
+            return None
+    except Exception as e:
+        st.error(f"Error downloading file: {e}")
+        return None
 
 # Main Streamlit App
 def main():
@@ -293,12 +312,23 @@ def main():
         
         # Option to download from SharePoint or upload file
         data_source = st.radio("Choose data source:", 
-                              ["📥 Upload Excel File", "🌐 Download from SharePoint"])
+                              ["📥 Upload Excel File", "🌐 DSE", "🌐 DCSD"])
         
-        if data_source == "🌐 Download from SharePoint":
+        if data_source == "🌐 DSE":
             if st.button("📥 Download Schedule"):
                 with st.spinner("Downloading schedule..."):
                     file_data = download_from_sharepoint()
+                    if file_data:
+                        st.session_state.df = load_schedule(file_data)
+                        if st.session_state.df is not None:
+                            st.success("✅ Schedule downloaded successfully!")
+                            st.session_state.file_processed = True
+                        else:
+                            st.error("❌ Failed to process downloaded file")
+        elif data_source == "🌐 DSE":
+            if st.button("📥 Download Schedule"):
+                with st.spinner("Downloading schedule..."):
+                    file_data = download_from_sharepoint2()
                     if file_data:
                         st.session_state.df = load_schedule(file_data)
                         if st.session_state.df is not None:
