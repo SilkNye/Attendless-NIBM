@@ -218,13 +218,13 @@ def calculate_holiday_allowance(total_sessions, current_missed, min_percentage=8
 
 def get_valid_file_path():
     """Download Excel from SharePoint public link or ask user if fails"""
-    shared_link = "https://nibm-my.sharepoint.com/:x:/g/personal/chandula_nibm_lk/EWelzFX_1ipFhyHvho9Su2oBBR0L2UAnqPzQHFhROycGiQ?e=aMcKjo"
+    shared_link = "https://nibm-my.sharepoint.com/:x:/g/personal/amilau_nibm_lk/EdzoomT5ACJCjUpohkuSd78B6FMiyqSt2LeF4a3nZuXFkw?e=phnvms"
 
     # Extract file id token from URL
     file_id = urlparse(shared_link).path.split('/')[-1]
 
     # Construct direct download URL
-    direct_download_url = f"https://nibm-my.sharepoint.com/personal/chandula_nibm_lk/_layouts/15/download.aspx?share={file_id}"
+    direct_download_url = f"https://nibm-my.sharepoint.com/personal/amilau_nibm_lk/_layouts/15/download.aspx?share={file_id}"
 
     print(f"🌐 Downloading schedule from SharePoint link...")
     try:
