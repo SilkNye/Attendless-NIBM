@@ -289,7 +289,7 @@ def download_from_sharepoint2():
     try:
         # Extract file id token from URL
         file_id = urlparse(shared_link).path.split('/')[-1]
-        direct_download_url = f"https://nibm-my.sharepoint.com/personal/chandula_nibm_lk/_layouts/15/download.aspx?share={file_id}"
+        direct_download_url = f"https://nibm-my.sharepoint.com/personal/amilau_nibm_lk/_layouts/15/download.aspx?share={file_id}"
         
         response = requests.get(direct_download_url, stream=True)
         if response.status_code == 200:
