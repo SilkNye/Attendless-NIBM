@@ -325,7 +325,7 @@ def main():
                             st.session_state.file_processed = True
                         else:
                             st.error("❌ Failed to process downloaded file")
-        elif data_source == "🌐 DSE":
+        elif data_source == "🌐 DCSD":
             if st.button("📥 Download Schedule"):
                 with st.spinner("Downloading schedule..."):
                     file_data = download_from_sharepoint2()
